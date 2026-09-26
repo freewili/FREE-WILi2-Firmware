@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "product": "FREE-WILi2",
+  "release": "v07",
+  "title": "v07 - Day Zero DEFCON release",
+  "files": [
+    {
+      "component": "main",
+      "version": "v07",
+      "file": "firmware/FW2Main-v07.uf2",
+      "size": 3415552,
+      "sha256": "4dbecc4f302079164d1f6630966a55ab600bc793d742e85092642d4b13e66f0b"
+    },
+    {
+      "component": "display",
+      "version": "v07",
+      "file": "firmware/FW2Display-v07.uf2",
+      "size": 14093824,
+      "sha256": "0d49cdd3ebf4e0068c283da2bd6d141a2cd76f4f1c78ddc3ac6422cfb6a0bdc9"
+    },
+    {
+      "component": "bottlenose",
+      "version": "spartahackFw1final-1743-g349128",
+      "file": "bottlenose/bottlenose-spartahackFw1final-1743-g349128-merged.bin",
+      "size": 2179072,
+      "sha256": "1795ce2187bbe4a76a82e299751e6d957b3de1a350b0c27b3115bc4e08bcd6b6"
+    },
+    {
+      "component": "bottlenose-flasher-args",
+      "version": "spartahackFw1final-1743-g349128",
+      "file": "bottlenose/flasher_args.json",
+      "size": 1049,
+      "sha256": "1aba774451309bd49ac8820160643fdb4b04d4338bd248af2b1d047fa01ecdab"
+    }
+  ]
+}
