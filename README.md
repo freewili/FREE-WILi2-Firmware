@@ -7,6 +7,15 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v08-preview.2 - Current firmware preview
+
+Fresh builds of Main, Display, and wifiCPU, all with embedded version **v08**.
+Includes the current Display application with regenerated ROM assets and the
+current ESP32-C5 wifiCPU firmware. Replaces the Day Zero Display/wifiCPU
+images carried in preview.1. See [full notes](releases/v08-preview.2/README.md).
+Select **Preview** and **Refresh** in the updater. Preview uses explicitly
+published packages; it does not automatically follow GitLab commits.
+
 ### v08-preview.1 - wifiCPU updater preview
 
 Adds one-button wifiCPU installation and flash verification through Main v08.
@@ -42,8 +51,8 @@ that folder's contents at its root:
 manifest.json
 README.md
 firmware/FW2Main-v08.uf2
-firmware/FW2Display-v07.uf2
-wifiCPU/wifiCPU-spartahackFw1final-1743-g349128-merged.bin
+firmware/FW2Display-v08.uf2
+wifiCPU/wifiCPU-v08-merged.bin
 wifiCPU/flasher_args.json
 ```
 
@@ -63,7 +72,7 @@ split-image paths are not additional files included in this ZIP.
 1. Copy a complete tested set of images into a new `releases/<version>/`
    folder. Use a unique version, such as `v08` or `v08-preview.1`.
 2. Write the release notes in the folder's `README.md` and add a summary to
-   this README. Create its manifest using `releases/v08-preview.1/manifest.json` as the schema
+   this README. Create its manifest using `releases/v08-preview.2/manifest.json` as the schema
    example. Read component versions from the built images and calculate
    their sizes and SHA-256 checksums. Never relabel an old binary as a new
    component version.

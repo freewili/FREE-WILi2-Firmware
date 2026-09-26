@@ -44,7 +44,7 @@ become the GitHub Release notes. The repository README contains a release
 history summary and links to these per-release notes.
 
 `manifest.json` is UTF-8 JSON. See the complete real
-[current manifest](releases/v08-preview.1/manifest.json). Required top-level fields:
+[current manifest](releases/v08-preview.2/manifest.json). Required top-level fields:
 
 | Field | Meaning |
 | --- | --- |

@@ -1,0 +1,36 @@
+{
+  "schema": 2,
+  "product": "FREE-WILi2",
+  "release": "v08-preview.2",
+  "title": "v08-preview.2 - Current firmware preview",
+  "files": [
+    {
+      "component": "main",
+      "version": "v08",
+      "file": "firmware/FW2Main-v08.uf2",
+      "size": 3830784,
+      "sha256": "799c9fe4e1d8c480a92261463f4145002d66532ca93510846318608c9bb8d163"
+    },
+    {
+      "component": "display",
+      "version": "v08",
+      "file": "firmware/FW2Display-v08.uf2",
+      "size": 14132224,
+      "sha256": "57aa6ba5aeac9a90435b8c7b2e0e5bbc9c780df23042fa2f402645c86f4435eb"
+    },
+    {
+      "component": "wifiCPU",
+      "version": "v08",
+      "file": "wifiCPU/wifiCPU-v08-merged.bin",
+      "size": 2179072,
+      "sha256": "96fbab849e4e6284ae0eec806556084663310b3a92c041b85c8271452572ad48"
+    },
+    {
+      "component": "wifiCPU-flasher-args",
+      "version": "v08",
+      "file": "wifiCPU/flasher_args.json",
+      "size": 1049,
+      "sha256": "1aba774451309bd49ac8820160643fdb4b04d4338bd248af2b1d047fa01ecdab"
+    }
+  ]
+}
