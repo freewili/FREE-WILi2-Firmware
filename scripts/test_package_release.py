@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+import zipfile
 from package_release import package, validate
 
 
@@ -26,6 +27,8 @@ class PackageTests(unittest.TestCase):
         b = package(self.folder, self.root / 'b').read_bytes()
         self.assertEqual(a, b)
         self.assertEqual(len(validate(self.folder)[1]), 6)
+        with zipfile.ZipFile(self.root / 'a/FREE-WILi2-v07.zip') as archive:
+            self.assertTrue(all(info.create_system == 3 for info in archive.infolist()))
 
     def test_corrupt_firmware(self):
         path = self.folder / 'firmware/FW2Main-v07.uf2'
