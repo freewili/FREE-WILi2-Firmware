@@ -29,8 +29,8 @@
       "component": "wifiCPU-flasher-args",
       "version": "v08",
       "file": "wifiCPU/flasher_args.json",
-      "size": 1075,
-      "sha256": "f7f5b78eb992e919cb9d29d42776538b1e69e8e2cbb487b9a5dcdc5146237d5a"
+      "size": 1049,
+      "sha256": "1aba774451309bd49ac8820160643fdb4b04d4338bd248af2b1d047fa01ecdab"
     }
   ]
 }
