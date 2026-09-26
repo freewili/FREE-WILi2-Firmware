@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -64,6 +65,30 @@ class PackageTests(unittest.TestCase):
     def test_mismatched_bottlenose_metadata_version(self):
         self.change(lambda m: m['files'][3].update(version='different-build'))
         with self.assertRaisesRegex(ValueError, 'versions disagree'):
+            validate(self.folder)
+
+    def test_schema_two_wifi_names(self):
+        def rename(m):
+            m['schema'] = 2
+            for entry in m['files'][2:]:
+                old = self.folder / entry['file']
+                entry['component'] = entry['component'].replace('bottlenose', 'wifiCPU')
+                entry['file'] = entry['file'].replace('bottlenose', 'wifiCPU')
+                new = self.folder / entry['file']
+                new.parent.mkdir(exist_ok=True)
+                old.rename(new)
+        self.change(rename)
+        self.assertEqual(len(validate(self.folder)[1]), 6)
+
+    def test_inner_wifi_checksum_even_with_updated_manifest_hash(self):
+        def corrupt(m):
+            entry = m['files'][2]
+            path = self.folder / entry['file']
+            data = bytearray(path.read_bytes()); data[0x100a0] ^= 1
+            path.write_bytes(data)
+            entry['sha256'] = hashlib.sha256(data).hexdigest()
+        self.change(corrupt)
+        with self.assertRaisesRegex(ValueError, 'checksum failed'):
             validate(self.folder)
 
 

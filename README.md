@@ -7,6 +7,14 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v08-preview.1 - wifiCPU updater preview
+
+Adds one-button wifiCPU installation and flash verification through Main v08.
+The GUI can update Main, Display, and wifiCPU from one ZIP and preserves saved
+Wi-Fi settings. New folders and component names use `wifiCPU` (schema 2).
+Display v07 and the existing wifiCPU binary retain their embedded versions.
+See [full notes](releases/v08-preview.1/README.md). Select **Preview** in the updater.
+
 ### v07 - Day Zero DEFCON release
 
 Initial complete release bundle containing the existing Day Zero images:
@@ -15,10 +23,10 @@ Initial complete release bundle containing the existing Day Zero images:
 | --- | --- |
 | Main | v07 |
 | Display | v07 |
-| Bottlenose (ESP32-C5) | spartahackFw1final-1743-g349128 |
+| wifiCPU (ESP32-C5) | spartahackFw1final-1743-g349128 |
 
 This packages the existing firmware without changing its bytes. Includes
-Display assets, the merged Bottlenose image, original Bottlenose flashing
+Display assets, the merged wifiCPU image, wifiCPU flashing
 metadata, and a manifest with component sizes and SHA-256 checksums.
 See the [full release notes](releases/v07/README.md).
 
@@ -33,19 +41,21 @@ that folder's contents at its root:
 ```text
 manifest.json
 README.md
-firmware/FW2Main-v07.uf2
+firmware/FW2Main-v08.uf2
 firmware/FW2Display-v07.uf2
-bottlenose/bottlenose-spartahackFw1final-1743-g349128-merged.bin
-bottlenose/flasher_args.json
+wifiCPU/wifiCPU-spartahackFw1final-1743-g349128-merged.bin
+wifiCPU/flasher_args.json
 ```
 
 `manifest.json` records the release name/title and each component's embedded
 version, filename, byte size, and SHA-256. Component versions may differ from
-the bundle version. Keep the UF2 version in its filename. Keep Bottlenose's
+the bundle version. Keep the UF2 version in its filename. Keep wifiCPU's
 embedded build version in its merged binary filename.
 
-The Bottlenose binary is a complete ESP32-C5 merged image for offset `0x0`.
-`flasher_args.json` preserves the original build metadata; its individual
+The wifiCPU binary is a complete ESP32-C5 merged image. The updater splits it
+into firmware regions to preserve NVS and PHY settings; do not flash its padding
+over saved settings.
+`flasher_args.json` records the split-image metadata; its individual
 split-image paths are not additional files included in this ZIP.
 
 ## Publish a stable or preview release
@@ -53,7 +63,7 @@ split-image paths are not additional files included in this ZIP.
 1. Copy a complete tested set of images into a new `releases/<version>/`
    folder. Use a unique version, such as `v08` or `v08-preview.1`.
 2. Write the release notes in the folder's `README.md` and add a summary to
-   this README. Create its manifest using `releases/v07/manifest.json` as the schema
+   this README. Create its manifest using `releases/v08-preview.1/manifest.json` as the schema
    example. Read component versions from the built images and calculate
    their sizes and SHA-256 checksums. Never relabel an old binary as a new
    component version.
@@ -81,6 +91,10 @@ changed. Old single-component nightly releases are not installable bundles
 and are ignored by the updater. Stable never falls back to Preview, and an
 empty Preview channel is shown as unavailable.
 
-The root `firmware/` and `bottlenose/` files are legacy compatibility copies
+The root `firmware/` and `wifiCPU/` files are legacy compatibility copies
 of the Day Zero images. New releases go only in `releases/<version>/` and
 their GitHub Release ZIP; do not use those legacy paths for publishing.
+
+Historical v07 files retain their original `bottlenose` paths and schema 1.
+The root compatibility image now lives in `wifiCPU/` with its embedded version
+in the filename. The binary itself is unchanged.

@@ -29,13 +29,41 @@ def uf2_version(data, component):
     return 'v' + versions.pop().decode('ascii')
 
 
-def bottlenose_version(data):
+def wifi_version(data):
+    if len(data) != 0x214000:
+        raise ValueError('Unsupported wifiCPU merged image layout')
+    expected = [(1, 2, 0x9000, 0x6000), (1, 1, 0xf000, 0x1000),
+                (0, 0, 0x10000, 0x200000), (1, 0x82, 0x210000, 0x4000)]
+    for index, entry in enumerate(expected):
+        magic, kind, subtype, offset, size, label, flags = struct.unpack_from('<HBBII16sI', data, 0x8000 + 32 * index)
+        if magic != 0x50aa or (kind, subtype, offset, size) != entry or flags:
+            raise ValueError('Incompatible wifiCPU partition layout')
+    if data[0x8080:0x8082] != b'\xeb\xeb' or hashlib.md5(data[0x8000:0x8080]).digest() != data[0x8090:0x80a0] or any(c != 255 for c in data[0x80a0:0x9000]):
+        raise ValueError('Invalid wifiCPU partition checksum')
+    for start, limit in [(0x2000, 0x8000), (0x10000, 0x210000)]:
+        if data[start] != 0xe9 or not 1 <= data[start + 1] <= 16 or struct.unpack_from('<H', data, start + 12)[0] != 23 or data[start + 23] != 1:
+            raise ValueError('Expected ESP32-C5 wifiCPU image with SHA-256')
+        pos = start + 24
+        checksum = 0xef
+        for _ in range(data[start + 1]):
+            if pos + 8 > limit:
+                raise ValueError('Truncated wifiCPU segment')
+            size = struct.unpack_from('<I', data, pos + 4)[0]
+            pos += 8
+            if pos + size > limit:
+                raise ValueError('Truncated wifiCPU segment data')
+            for byte in data[pos:pos + size]:
+                checksum ^= byte
+            pos += size
+        pos |= 15
+        if pos + 33 > limit or data[pos] != checksum or hashlib.sha256(data[start:pos + 1]).digest() != data[pos + 1:pos + 33]:
+            raise ValueError('wifiCPU image checksum failed')
     # ESP-IDF esp_app_desc_t immediately follows the app image header/segment.
     start = 0x10020
     if data[start:start + 4] != struct.pack('<I', 0xabcd5432):
-        raise ValueError('Missing Bottlenose ESP-IDF app descriptor')
-    if data[start + 48:start + 80].split(b'\0')[0] != b'bottlenose':
-        raise ValueError('Wrong Bottlenose project identity')
+        raise ValueError('Missing wifiCPU ESP-IDF app descriptor')
+    if data[start + 48:start + 80].split(b'\0')[0] not in (b'wifiCPU', b'bottlenose'):
+        raise ValueError('Wrong wifiCPU project identity')
     return data[start + 16:start + 48].split(b'\0')[0].decode('ascii')
 
 
@@ -44,8 +72,9 @@ def validate(folder):
     version = manifest['release']
     if not re.fullmatch(r'v[0-9][A-Za-z0-9.-]*', version) or len(version) > 80 or version != folder.name:
         raise ValueError('Release name must match its folder and start with v + a number')
-    if manifest['schema'] != 1 or manifest['product'] != 'FREE-WILi2':
+    if manifest['schema'] not in (1, 2) or manifest['product'] != 'FREE-WILi2':
         raise ValueError('Unsupported manifest')
+    wifi = 'bottlenose' if manifest['schema'] == 1 else 'wifiCPU'
     files = {}
     components = set()
     versions = {}
@@ -64,18 +93,18 @@ def validate(folder):
             target = 'FW2Main' if component == 'main' else 'FW2Display'
             if uf2_version(data, component) != component_version or name != f'firmware/{target}-{component_version}.uf2':
                 raise ValueError(f'UF2 filename/version mismatch: {name}')
-        elif component == 'bottlenose':
-            if bottlenose_version(data) != component_version or name != f'bottlenose/bottlenose-{component_version}-merged.bin':
-                raise ValueError('Bottlenose filename/version mismatch')
-        elif component == 'bottlenose-flasher-args':
-            if name != 'bottlenose/flasher_args.json' or json.loads(data)['extra_esptool_args']['chip'] != 'esp32c5':
-                raise ValueError('Wrong Bottlenose chip')
+        elif component == wifi:
+            if wifi_version(data) != component_version or name != f'{wifi}/{wifi}-{component_version}-merged.bin':
+                raise ValueError('wifiCPU filename/version mismatch')
+        elif component == wifi + '-flasher-args':
+            if name != f'{wifi}/flasher_args.json' or json.loads(data)['extra_esptool_args']['chip'] != 'esp32c5':
+                raise ValueError('Wrong wifiCPU chip')
         files[name] = data
         components.add(component)
-    if components != {'main', 'display', 'bottlenose', 'bottlenose-flasher-args'}:
-        raise ValueError('Release needs Main, Display, Bottlenose, and its original flasher arguments')
-    if versions['bottlenose'] != versions['bottlenose-flasher-args']:
-        raise ValueError('Bottlenose image and flashing metadata versions disagree')
+    if components != {'main', 'display', wifi, wifi + '-flasher-args'}:
+        raise ValueError('Release needs Main, Display, wifiCPU, and its original flasher arguments')
+    if versions[wifi] != versions[wifi + '-flasher-args']:
+        raise ValueError('wifiCPU image and flashing metadata versions disagree')
     actual = {p.relative_to(folder).as_posix() for p in folder.rglob('*') if p.is_file()}
     if actual != set(files) | {'manifest.json', 'README.md'}:
         raise ValueError('Unlisted or missing release files')
