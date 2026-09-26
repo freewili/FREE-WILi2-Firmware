@@ -94,6 +94,7 @@ def package(folder, output):
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for name, data in sorted(files.items()):
             info = zipfile.ZipInfo(name, (2026, 1, 1, 0, 0, 0))
+            info.create_system = 3  # Fixed Unix metadata on Windows and Linux.
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
             z.writestr(info, data, compresslevel=9)
