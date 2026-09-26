@@ -1,0 +1,36 @@
+{
+  "schema": 2,
+  "product": "FREE-WILi2",
+  "release": "v08-preview.1",
+  "title": "v08-preview.1 - wifiCPU updater preview",
+  "files": [
+    {
+      "component": "main",
+      "version": "v08",
+      "file": "firmware/FW2Main-v08.uf2",
+      "size": 3830784,
+      "sha256": "3a3c603c7d4c102045f7ec027c8de8cb572cfba85514385785bc6ab6a3260230"
+    },
+    {
+      "component": "display",
+      "version": "v07",
+      "file": "firmware/FW2Display-v07.uf2",
+      "size": 14093824,
+      "sha256": "0d49cdd3ebf4e0068c283da2bd6d141a2cd76f4f1c78ddc3ac6422cfb6a0bdc9"
+    },
+    {
+      "component": "wifiCPU",
+      "version": "spartahackFw1final-1743-g349128",
+      "file": "wifiCPU/wifiCPU-spartahackFw1final-1743-g349128-merged.bin",
+      "size": 2179072,
+      "sha256": "1795ce2187bbe4a76a82e299751e6d957b3de1a350b0c27b3115bc4e08bcd6b6"
+    },
+    {
+      "component": "wifiCPU-flasher-args",
+      "version": "spartahackFw1final-1743-g349128",
+      "file": "wifiCPU/flasher_args.json",
+      "size": 1043,
+      "sha256": "9bd2d2158965c8302138d9c7d680c6b09568e8f2f718fdcbb23ac50043b8ee1f"
+    }
+  ]
+}
