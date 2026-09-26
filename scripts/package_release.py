@@ -42,12 +42,13 @@ def bottlenose_version(data):
 def validate(folder):
     manifest = json.loads((folder / 'manifest.json').read_text(encoding='utf-8'))
     version = manifest['release']
-    if not re.fullmatch(r'v[0-9][A-Za-z0-9.-]*', version) or version != folder.name:
+    if not re.fullmatch(r'v[0-9][A-Za-z0-9.-]*', version) or len(version) > 80 or version != folder.name:
         raise ValueError('Release name must match its folder and start with v + a number')
     if manifest['schema'] != 1 or manifest['product'] != 'FREE-WILi2':
         raise ValueError('Unsupported manifest')
     files = {}
     components = set()
+    versions = {}
     for entry in manifest['files']:
         name, component = entry['file'], entry['component']
         if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', name) or '..' in name:
@@ -58,19 +59,23 @@ def validate(folder):
         if len(data) != entry['size'] or hashlib.sha256(data).hexdigest() != entry['sha256']:
             raise ValueError(f'Checksum/size mismatch: {name}')
         component_version = entry['version']
+        versions[component] = component_version
         if component in ('main', 'display'):
-            if uf2_version(data, component) != component_version or not name.endswith(f'-{component_version}.uf2'):
+            target = 'FW2Main' if component == 'main' else 'FW2Display'
+            if uf2_version(data, component) != component_version or name != f'firmware/{target}-{component_version}.uf2':
                 raise ValueError(f'UF2 filename/version mismatch: {name}')
         elif component == 'bottlenose':
-            if bottlenose_version(data) != component_version or not name.endswith(f'-{component_version}-merged.bin'):
+            if bottlenose_version(data) != component_version or name != f'bottlenose/bottlenose-{component_version}-merged.bin':
                 raise ValueError('Bottlenose filename/version mismatch')
         elif component == 'bottlenose-flasher-args':
-            if json.loads(data)['extra_esptool_args']['chip'] != 'esp32c5':
+            if name != 'bottlenose/flasher_args.json' or json.loads(data)['extra_esptool_args']['chip'] != 'esp32c5':
                 raise ValueError('Wrong Bottlenose chip')
         files[name] = data
         components.add(component)
     if components != {'main', 'display', 'bottlenose', 'bottlenose-flasher-args'}:
         raise ValueError('Release needs Main, Display, Bottlenose, and its original flasher arguments')
+    if versions['bottlenose'] != versions['bottlenose-flasher-args']:
+        raise ValueError('Bottlenose image and flashing metadata versions disagree')
     actual = {p.relative_to(folder).as_posix() for p in folder.rglob('*') if p.is_file()}
     if actual != set(files) | {'manifest.json', 'README.md'}:
         raise ValueError('Unlisted or missing release files')

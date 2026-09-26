@@ -58,6 +58,11 @@ class PackageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unlisted'):
             validate(self.folder)
 
+    def test_mismatched_bottlenose_metadata_version(self):
+        self.change(lambda m: m['files'][3].update(version='different-build'))
+        with self.assertRaisesRegex(ValueError, 'versions disagree'):
+            validate(self.folder)
+
 
 if __name__ == '__main__':
     unittest.main()
