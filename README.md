@@ -7,6 +7,17 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v08-preview.3 - ISO-TP transport and Linux updates
+
+Rebuilt Main and Display (embedded version **v08**) from the merged
+`feat/wificpu-update` + `feat/isotp` revision. Adds the ISO 15765-2 transport
+layer under CAN FD (`i\c	`, inline messages up to 256 bytes, SD-staged
+larger messages, STmin trim in microseconds), holds the CAN rail while the
+transport or the polled receive queue is armed, and carries the Linux shell,
+app-browser and file-copy additions. wifiCPU is the unchanged v08-preview.2
+image. See [full notes](releases/v08-preview.3/README.md). Select **Preview**
+and **Refresh** in the updater.
+
 ### v08-preview.2 - Current firmware preview
 
 Fresh builds of Main, Display, and wifiCPU, all with embedded version **v08**.
