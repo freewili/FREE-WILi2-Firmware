@@ -7,6 +7,19 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v09 - Stable firmware release
+
+The first Stable release since v07. Main, Display, and wifiCPU are all
+rebuilt with embedded version **v09** from one source revision. Since
+v08-preview.3 it adds the rebuilt 125 kHz RFID reader/writer with its Wave
+view, the Display blanking fix (panel hardware reset, tearing-signal watchdog,
+I2C wedge recovery), and the **Wireless > ESP32 Mode** OneWili API bridge. The
+OneWili stable command IDs changed: ISO-TP is 613-622, Linux CM0 USB Mode is
+633, and ESP32 Mode is 634. It also includes all v08 Preview work: verified
+wifiCPU updates, the current Display and wifiCPU applications, ISO-TP, and the
+Linux additions. See [full notes](releases/v09/README.md). Select **Stable**
+and **Refresh** in the updater.
+
 ### v08-preview.3 - ISO-TP transport and Linux updates
 
 Rebuilt Main and Display (embedded version **v08**) from the merged
@@ -61,9 +74,9 @@ that folder's contents at its root:
 ```text
 manifest.json
 README.md
-firmware/FW2Main-v08.uf2
-firmware/FW2Display-v08.uf2
-wifiCPU/wifiCPU-v08-merged.bin
+firmware/FW2Main-v09.uf2
+firmware/FW2Display-v09.uf2
+wifiCPU/wifiCPU-v09-merged.bin
 wifiCPU/flasher_args.json
 ```
 
