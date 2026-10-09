@@ -7,6 +7,21 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v10 - Stable firmware release
+
+Main, Display, and wifiCPU are all rebuilt with embedded version **v10** from
+one source revision. Main now runs at full flash speed: it had been reading
+its program from flash at about 0.6 MHz after its bootloader handed over, and
+rTHON ran about 6 statements per second instead of about 84,000. Main no
+longer reformats its internal flash on every boot without a microSD card, and
+settings are stored in internal flash again (`flsh:settings`). Settings saved
+on the SD card by earlier firmware are still read from `1:/settings`. New:
+per-port USB-A host power (`h\p\u`, `h\p\p`), and 10BASE-T1L, SAE J1708,
+and Modbus RTU/TCP with the San Diego Orca. OneWili adds explicit on/off
+settings and a Python events API. wifiCPU v10 adds a capture mode for the
+GUI's Wi-Fi & BT view. See [full notes](releases/v10/README.md). Select
+**Stable** and **Refresh** in the updater.
+
 ### v09 - Stable firmware release
 
 The first Stable release since v07. Main, Display, and wifiCPU are all
@@ -74,9 +89,9 @@ that folder's contents at its root:
 ```text
 manifest.json
 README.md
-firmware/FW2Main-v09.uf2
-firmware/FW2Display-v09.uf2
-wifiCPU/wifiCPU-v09-merged.bin
+firmware/FW2Main-v10.uf2
+firmware/FW2Display-v10.uf2
+wifiCPU/wifiCPU-v10-merged.bin
 wifiCPU/flasher_args.json
 ```
 
