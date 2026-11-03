@@ -1,0 +1,36 @@
+{
+  "schema": 2,
+  "product": "FREE-WILi2",
+  "release": "v11-preview.1",
+  "title": "v11-preview.1 - FPGA designs, ZoomIO FIFOs and Power Cycle Reboot",
+  "files": [
+    {
+      "component": "main",
+      "version": "v11",
+      "file": "firmware/FW2Main-v11.uf2",
+      "size": 3802624,
+      "sha256": "ebe85da85543753dab51eb0f6d62f6fdd51b4f0f25370e78ea96a993d4645cb9"
+    },
+    {
+      "component": "display",
+      "version": "v11",
+      "file": "firmware/FW2Display-v11.uf2",
+      "size": 14491648,
+      "sha256": "7e958182ac3eca889846672521897196c06678664752261e82f5901c63259667"
+    },
+    {
+      "component": "wifiCPU",
+      "version": "v10",
+      "file": "wifiCPU/wifiCPU-v10-merged.bin",
+      "size": 2179072,
+      "sha256": "78632ceb75434476ab39918afae95ff04c207726aba91657b5af39cb9501a93f"
+    },
+    {
+      "component": "wifiCPU-flasher-args",
+      "version": "v10",
+      "file": "wifiCPU/flasher_args.json",
+      "size": 1049,
+      "sha256": "1aba774451309bd49ac8820160643fdb4b04d4338bd248af2b1d047fa01ecdab"
+    }
+  ]
+}

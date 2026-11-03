@@ -7,6 +7,19 @@ GitHub pre-releases. Both channels use the same package format.
 
 ## Release notes
 
+### v11-preview.1 - FPGA designs, ZoomIO FIFOs and Power Cycle Reboot
+
+Preview build of Main and Display with embedded version **v11**; wifiCPU is
+the unchanged v10 image. Adds a **Hardware > FPGA** menu (`h\f`) that loads
+your own FPGA designs built with the open-source
+[wilifpga](https://github.com/freewili/wilifpga) board support package, with
+register access, a stream FIFO and fast PIO links. ZoomIO runs on new
+transmit and receive FIFOs with a script message queue and a display panel,
+and Power Cycle Reboot (`h\p\r`) recovers a board without removing the
+battery. OneWili commands 690-702 are new. See
+[full notes](releases/v11-preview.1/README.md). Select **Preview** and
+**Refresh** in the updater.
+
 ### v10 - Stable firmware release
 
 Main, Display, and wifiCPU are all rebuilt with embedded version **v10** from
